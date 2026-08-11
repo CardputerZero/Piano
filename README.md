@@ -2,6 +2,8 @@
 
 A compact sampled piano and guided music playground for M5Stack CardputerZero.
 
+<img width="320" height="170" alt="11111" src="https://github.com/user-attachments/assets/533ca646-bd44-4252-97af-6e57329575bf" />
+
 ## Features
 
 - Play a polyphonic sampled piano across selectable octaves
