@@ -1,0 +1,16 @@
+Piano SoundFont
+===============
+
+Installed filename: piano.sf2
+Preset: Yamaha Grand Piano (bank 0, program 0)
+Source SoundFont: FluidR3_GM.sf2
+Source package: fluid-soundfont-gm 3.1-5.3
+Project URL: https://packages.debian.org/sid/fluid-soundfont-gm
+SHA-256: addb732569676727b02777a8df1f5d49eca0a19d4f306cca31624fdbfa0e1909
+Copyright: Copyright 2000-2002, 2008 Frank Wen; Copyright 2008 Toby Smithe
+License: MIT
+
+The bundled file contains only FluidR3 preset 0. It was exported from the
+original SoundFont as SFZ and rebuilt as a one-preset SF2 with Polyphone 2.2.
+No sample processing or resampling was applied. See THIRD_PARTY_NOTICES.md for
+the complete FluidR3 license notice.

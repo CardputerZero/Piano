@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=Piano
+Exec=/usr/share/APPLaunch/bin/M5CardputerZero-Piano
+Terminal=false
+Icon=share/images/piano.png
+Type=Application
+
