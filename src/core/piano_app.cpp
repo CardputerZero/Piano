@@ -89,6 +89,19 @@ void PianoApp::onInput(const PianoInputEvent& event)
         }
         return;
     }
+    if (event.key == PianoKey::Help) {
+        if (event.pressed && !event.repeated) {
+            const bool was_visible = _view.helpVisible();
+            _view.toggleHelp();
+            if (!was_visible) {
+                _model.releaseAll(true);
+            }
+        }
+        return;
+    }
+    if (_view.helpVisible()) {
+        return;
+    }
     _view_model.onInput(event);
 }
 

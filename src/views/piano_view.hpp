@@ -25,6 +25,8 @@ public:
     void onEnter(lv_obj_t* parent);
     void onExit();
     void tick(uint32_t now_ms);
+    void toggleHelp();
+    bool helpVisible() const;
 
 private:
     struct KeyVisual;
@@ -40,6 +42,10 @@ private:
     std::unique_ptr<smooth_ui_toolkit::lvgl_cpp::Container> _header_divider;
     std::unique_ptr<smooth_ui_toolkit::lvgl_cpp::Label> _keymap_hint;
     std::unique_ptr<smooth_ui_toolkit::lvgl_cpp::Label> _mode_hint;
+    std::unique_ptr<smooth_ui_toolkit::lvgl_cpp::Container> _help_overlay;
+    std::unique_ptr<smooth_ui_toolkit::lvgl_cpp::Label> _help_title;
+    std::unique_ptr<smooth_ui_toolkit::lvgl_cpp::Label> _help_hint;
+    std::array<std::unique_ptr<smooth_ui_toolkit::lvgl_cpp::Label>, 9> _help_rows;
     std::unique_ptr<smooth_ui_toolkit::lvgl_cpp::Container> _chord_panel;
     std::unique_ptr<smooth_ui_toolkit::lvgl_cpp::Label> _chord_key_label;
     std::unique_ptr<smooth_ui_toolkit::lvgl_cpp::Label> _active_chord_label;
@@ -55,6 +61,7 @@ private:
     bool _keymap_hint_highlighted              = false;
     bool _playalong_keymap_panel_visible       = false;
     bool _playalong_label_active               = false;
+    bool _help_visible                         = false;
     int _shown_playalong_demo_target           = -1;
     int _shown_playalong_guide_target          = -1;
     uint32_t _shown_playalong_success_revision = 0;

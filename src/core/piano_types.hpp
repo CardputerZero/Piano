@@ -27,6 +27,7 @@ enum class PianoKey {
     ToggleMode,
     ToggleTonality,
     TogglePlayalong,
+    Help,
     Escape,
     Unknown,
 };
