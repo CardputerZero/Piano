@@ -83,6 +83,8 @@ PianoKey pianoKeyForLinuxCode(uint16_t code)
             return PianoKey::ToggleTonality;
         case KEY_P:
             return PianoKey::TogglePlayalong;
+        case KEY_HELP:
+            return PianoKey::Help;
         case KEY_ESC:
             return PianoKey::Escape;
         default:

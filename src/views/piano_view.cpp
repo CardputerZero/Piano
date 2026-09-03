@@ -84,6 +84,11 @@ constexpr uint32_t kTargetBadgeTextColor   = 0x5A4A00;
 constexpr uint32_t kDemoBadgeColor         = 0x168DFF;
 constexpr uint32_t kDemoBadgeBorderColor   = 0x72C9FF;
 constexpr uint32_t kDemoBadgeTextColor     = 0xFFFFFF;
+constexpr uint32_t kHelpBackgroundColor     = 0x111111;
+constexpr uint32_t kHelpPanelColor          = 0x242424;
+constexpr uint32_t kHelpTitleColor          = 0xFFFFFF;
+constexpr uint32_t kHelpTextColor           = 0xD0D0D0;
+constexpr uint32_t kHelpHintColor           = 0x8E8E8E;
 
 constexpr std::array<int, 8> kConfettiDx{-24, -17, -8, 7, 16, 24, -20, 20};
 constexpr std::array<int, 8> kConfettiDy{-7, -20, -25, -25, -19, -6, 8, 8};
@@ -98,6 +103,17 @@ constexpr std::array<const char*, 8> kWhiteKeymap{"A", "S", "D", "F", "G", "H", 
 constexpr std::array<int, 5> kBlackKeyX{39, 75, 147, 183, 219};
 constexpr std::array<int, 5> kBlackNoteIndex{1, 3, 6, 8, 10};
 constexpr std::array<const char*, 5> kBlackKeymap{"W", "E", "T", "Y", "U"};
+constexpr std::array<const char*, 9> kHelpText{
+    "SPACE     Keymap on / off",
+    "TAB       Plain / chord mode",
+    "P         Sample song tutorial",
+    "Z / C     Change octave",
+    "A S D F G H J K   Piano keys",
+    "W E T Y U         Black keys",
+    "M         Major / Minor (chord mode)",
+    "KEY_HELP   Show / hide this help",
+    "Hold ESC  Exit",
+};
 
 using smooth_ui_toolkit::lvgl_cpp::Canvas;
 using smooth_ui_toolkit::lvgl_cpp::Container;
@@ -574,6 +590,42 @@ void PianoView::onEnter(lv_obj_t* parent)
     _mode_hint->setTextColor(lv_color_hex(kHeaderTextColor));
     _mode_hint->setText("TAB: Mode");
 
+    _help_overlay = std::make_unique<Container>(_root->raw_ptr());
+    _help_overlay->setSize(kScreenWidth, kScreenHeight);
+    _help_overlay->setPos(0, 0);
+    setupContainer(*_help_overlay);
+    _help_overlay->setBgColor(lv_color_hex(kHelpBackgroundColor));
+    _help_overlay->setBorderWidth(1);
+    _help_overlay->setBorderColor(lv_color_hex(kHelpPanelColor));
+    _help_overlay->setHidden(true);
+
+    _help_title = std::make_unique<Label>(_help_overlay->raw_ptr());
+    _help_title->setSize(kScreenWidth - 20, 22);
+    _help_title->setPos(10, 5);
+    _help_title->setTextAlign(LV_TEXT_ALIGN_CENTER);
+    _help_title->setTextFont(uiFont14());
+    _help_title->setTextColor(lv_color_hex(kHelpTitleColor));
+    _help_title->setText("Piano Help");
+
+    for (std::size_t index = 0; index < _help_rows.size(); ++index) {
+        auto& row = _help_rows[index];
+        row = std::make_unique<Label>(_help_overlay->raw_ptr());
+        row->setSize(kScreenWidth - 20, 14);
+        row->setPos(10, 28 + static_cast<int>(index) * 14);
+        row->setTextAlign(LV_TEXT_ALIGN_LEFT);
+        row->setTextFont(uiFont10());
+        row->setTextColor(lv_color_hex(kHelpTextColor));
+        row->setText(kHelpText[index]);
+    }
+
+    _help_hint = std::make_unique<Label>(_help_overlay->raw_ptr());
+    _help_hint->setSize(kScreenWidth - 20, 12);
+    _help_hint->setPos(10, 156);
+    _help_hint->setTextAlign(LV_TEXT_ALIGN_RIGHT);
+    _help_hint->setTextFont(uiFont10());
+    _help_hint->setTextColor(lv_color_hex(kHelpHintColor));
+    _help_hint->setText("KEY_HELP to close");
+
     _chord_panel = std::make_unique<Container>(_root->raw_ptr());
     _chord_panel->setSize(kChordPanelWidth, kChordPanelHeight);
     _chord_panel->setPos(kChordPanelX, kChordPanelY);
@@ -678,10 +730,17 @@ void PianoView::onExit()
     _chord_panel.reset();
     _mode_hint.reset();
     _keymap_hint.reset();
+    _help_title.reset();
+    _help_hint.reset();
+    for (auto& row : _help_rows) {
+        row.reset();
+    }
+    _help_overlay.reset();
     _keymap_visuals_overridden        = false;
     _keymap_hint_highlighted          = false;
     _playalong_keymap_panel_visible   = false;
     _playalong_label_active           = false;
+    _help_visible                     = false;
     _shown_playalong_demo_target      = -1;
     _shown_playalong_guide_target     = -1;
     _shown_playalong_success_revision = 0;
@@ -733,6 +792,22 @@ void PianoView::tick(uint32_t now_ms)
         }
     }
     _keymap_visuals_overridden = effects_visible;
+}
+
+void PianoView::toggleHelp()
+{
+    if (_help_overlay) {
+        _help_visible = !_help_visible;
+        _help_overlay->setHidden(!_help_visible);
+        if (_help_visible) {
+            lv_obj_move_foreground(_help_overlay->raw_ptr());
+        }
+    }
+}
+
+bool PianoView::helpVisible() const
+{
+    return _help_visible;
 }
 
 void PianoView::render(const PianoState& state)
