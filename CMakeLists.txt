@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.16)
 
-project(M5CardputerZeroPiano VERSION 0.1.0 LANGUAGES C CXX ASM)
+project(M5CardputerZeroPiano VERSION 0.1.1 LANGUAGES C CXX ASM)
 
 option(PIANO_USE_SDL "Use LVGL's SDL backend for desktop testing" ON)
 option(PIANO_BUILD_TESTS "Build Piano unit tests" OFF)
