@@ -137,8 +137,6 @@ PianoKey pianoKeyForSdlScancode(SDL_Scancode scancode)
             return PianoKey::ToggleTonality;
         case SDL_SCANCODE_P:
             return PianoKey::TogglePlayalong;
-        case SDL_SCANCODE_HELP:
-            return PianoKey::Help;
         case SDL_SCANCODE_ESCAPE:
             return PianoKey::Escape;
         default:

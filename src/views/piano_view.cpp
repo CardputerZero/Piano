@@ -111,7 +111,7 @@ constexpr std::array<const char*, 9> kHelpText{
     "A S D F G H J K   Piano keys",
     "W E T Y U         Black keys",
     "M         Major / Minor (chord mode)",
-    "Fn + H    Show / hide this help",
+    "KEY_HELP   Show / hide this help",
     "Hold ESC  Exit",
 };
 
@@ -624,7 +624,7 @@ void PianoView::onEnter(lv_obj_t* parent)
     _help_hint->setTextAlign(LV_TEXT_ALIGN_RIGHT);
     _help_hint->setTextFont(uiFont10());
     _help_hint->setTextColor(lv_color_hex(kHelpHintColor));
-    _help_hint->setText("Fn + H to close");
+    _help_hint->setText("KEY_HELP to close");
 
     _chord_panel = std::make_unique<Container>(_root->raw_ptr());
     _chord_panel->setSize(kChordPanelWidth, kChordPanelHeight);
